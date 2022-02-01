@@ -19,7 +19,7 @@ def get_ratings_collection(collection_name):
 
 
 def get_rating_by_id(rating_col,ratingId):
-    result = rating_col.find_one({"id":ratingId})
+    result = rating_col.find_one({"id":ratingId},{"_id":0})
 
     if result:
         return result
