@@ -1,2 +1,2 @@
-# MSOpenHack
+# MSOpenHack-Python
 Microsoft OpenHack event
