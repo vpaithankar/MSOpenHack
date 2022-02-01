@@ -49,9 +49,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
              #return func.HttpResponse(f"Hello, {ratingId}. This HTTP triggered function executed successfully.")
             return func.HttpResponse(str(result),status_code=200)
         else:
-            return func.HttpResponse("This rating is not found in the database. Please check the entered rating id",status_code=404)
+            return func.HttpResponse("This rating is not found in the database!  Please check the entered rating id",status_code=404)
     else:
         return func.HttpResponse(
-             "Bad Reuest.Please pass a ratingId in the query string or in the request body for a response.",
+             "BAD REQUEST!!! Please pass a ratingId in the query string or in the request body for a response.",
              status_code=400
         )
