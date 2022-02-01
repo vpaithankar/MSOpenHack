@@ -45,9 +45,11 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     if ratingId:
         rc = get_ratings_collection('ratings_test')
         result = get_rating_by_id(rc,ratingId)
-
-        #return func.HttpResponse(f"Hello, {ratingId}. This HTTP triggered function executed successfully.")
-        return func.HttpResponse(str(result),status_code=200)
+        if result:
+             #return func.HttpResponse(f"Hello, {ratingId}. This HTTP triggered function executed successfully.")
+            return func.HttpResponse(str(result),status_code=200)
+        else:
+            return func.HttpResponse("Rating is not found in the database. Please check the entered rating id",status_code=404)
     else:
         return func.HttpResponse(
              "This HTTP triggered function executed successfully. Pass a ratingId in the query string or in the request body for a personalized response.",
