@@ -1,6 +1,31 @@
 import logging
 
 import azure.functions as func
+#from db_ops import get_db_client, get_ratings_collection, get_rating_by_id
+from pymongo import MongoClient
+
+conn_str = "mongodb://dbohicecreamratings:YDjwWB1PW7C4lJjKxS2s4LDY99BVocbqErOV36YKTQ56eDYI2hJg5ASV1G9qFovTzjuTE8dnWCO2JH8XEP5T9A==@dbohicecreamratings.mongo.cosmos.azure.com:10255/?ssl=true&retrywrites=false&replicaSet=globaldb&maxIdleTimeMS=120000&appName=@dbohicecreamratings@"
+db_name = 'icecreamratings'
+
+def get_db_client():
+    client = MongoClient(conn_str)
+    db = client[db_name]
+    return db
+
+def get_ratings_collection(collection_name):
+    db = get_db_client()
+    ratings = db[collection_name]
+    return ratings
+
+
+def get_rating_by_id(rating_col,ratingId):
+    result = rating_col.find_one({"id":ratingId})
+
+    if result:
+        return result
+    else:
+        return None
+
 
 
 
@@ -8,19 +33,23 @@ import azure.functions as func
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
-    ratingId = req.params.get('name')
+    ratingId = req.params.get('ratingId')
     if not ratingId:
         try:
             req_body = req.get_json()
         except ValueError:
             pass
         else:
-            ratingId = req_body.get('name')
+            ratingId = req_body.get('ratingId')
 
     if ratingId:
-        return func.HttpResponse(f"Hello, {ratingId}. This HTTP triggered function executed successfully.")
+        rc = get_ratings_collection('ratings_test')
+        result = get_rating_by_id(rc,ratingId)
+
+        #return func.HttpResponse(f"Hello, {ratingId}. This HTTP triggered function executed successfully.")
+        return func.HttpResponse(str(result),status_code=200)
     else:
         return func.HttpResponse(
              "This HTTP triggered function executed successfully. Pass a ratingId in the query string or in the request body for a personalized response.",
-             status_code=200
+             status_code=404
         )
