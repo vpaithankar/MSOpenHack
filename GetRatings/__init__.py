@@ -55,6 +55,6 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             return func.HttpResponse("User is not found in the database! Please check the entered user id",status_code=404)
     else:
         return func.HttpResponse(
-             "This HTTP triggered function executed successfully. Pass a userId in the query string or in the request body for a personalized response.",
-             status_code=404
+             "Please pass a userId in the query string or in the request body for a  response.",
+             status_code=400
         )
